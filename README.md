@@ -11,7 +11,19 @@ User registration and secure login with JWT-based authentication
 Profile management and password update functionality
 
 Access control for managing individual user content
+### User Roles and Permissions
 
+#### Admin
+- Can manage users, products, sales, and suppliers.
+- Can view all data and generate reports.
+
+#### Seller
+- Can manage sales and view products.
+- Cannot manage suppliers or other users.
+
+#### Supplier
+- Can view supplier-related data.
+- Cannot manage products, sales, or other users.
 📦 Product Management
 Create products with full details: name, description, unit price, stock level
 
