@@ -1,36 +1,38 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
+import { Navbar, Nav, Container } from 'react-bootstrap';
+import '../css/Navbar.css'; // Assuming you have some custom styles
 
 const AppNavbar = ({ role, setRole }) => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        sessionStorage.removeItem('token'); // Clear sessionStorage
-        setRole(null); // Clear role in App.js
-        navigate('/login'); // Redirect to login page
+        sessionStorage.removeItem('token');
+        setRole(null);
+        navigate('/login');
     };
 
     return (
-        <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
+        <Navbar bg="dark" variant="dark" expand="lg" sticky="top">
             <Container>
-                <Navbar.Brand as={Link} to="/">
-                    Invencio
-                </Navbar.Brand>
+                <Navbar.Brand as={Link} to="/dashboard">Invencio</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
                         <Nav.Link as={Link} to="/dashboard">Dashboard</Nav.Link>
-                        {role === 'admin' && <Nav.Link as={Link} to="/admin">Admin</Nav.Link>}
-                        {role === 'seller' && <Nav.Link as={Link} to="/seller">Seller</Nav.Link>}
-                        {role === 'supplier' && <Nav.Link as={Link} to="/supplier">Supplier</Nav.Link>}
+                        {role === 'admin' && (
+                            <>
+                                <Nav.Link as={Link} to="/admin/users">Users</Nav.Link>
+                                <Nav.Link as={Link} to="/admin/products">Products</Nav.Link>
+                                <Nav.Link as={Link} to="/admin/categories">Categories</Nav.Link>
+                                <Nav.Link as={Link} to="/admin/brands">Brands</Nav.Link>
+                                <Nav.Link as={Link} to="/admin/sales">Sales</Nav.Link>
+                                <Nav.Link as={Link} to="/admin/suppliers">Suppliers</Nav.Link>
+                            </>
+                        )}
                     </Nav>
                     <Nav>
-                        <NavDropdown title="Account" id="account-dropdown" align="end">
-                            <NavDropdown.Item as={Link} to="/profile">Profile</NavDropdown.Item>
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
-                        </NavDropdown>
+                        <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>

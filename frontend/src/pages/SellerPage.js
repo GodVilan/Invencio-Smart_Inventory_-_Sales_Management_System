@@ -13,7 +13,7 @@ const SellerPage = () => {
                         <Card.Body>
                             <Card.Title>Product Management</Card.Title>
                             <p>View and manage the products available for sale.</p>
-                            <ProductManagement />
+                            <ProductManagement apiEndpoint="/seller/products" /> {/* Seller-specific endpoint */}
                         </Card.Body>
                     </Card>
                 </Col>

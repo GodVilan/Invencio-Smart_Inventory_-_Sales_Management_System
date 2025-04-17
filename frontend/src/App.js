@@ -3,13 +3,21 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Dashboard from './components/Dashboard';
-import AdminPage from './pages/AdminPage';
+// import AdminPage from './pages/AdminPage';
 import SellerPage from './pages/SellerPage';
 import SupplierPage from './pages/SupplierPage';
 import ProtectedRoute from './routes/ProtectedRoute';
 import PublicRoute from './routes/PublicRoute';
 import Navbar from './components/Navbar';
 import Register from './pages/Register';
+import Profile from './components/Profile';
+import ChangePasswordPage from './components/ChangePasswordPage';
+import UserManagement from './components/UserManagement';
+import ProductManagement from './components/ProductManagement';
+import CategoryManagement from './components/CategoryManagement';
+import BrandManagement from './components/BrandManagement';
+import SalesManagement from './components/SalesManagement';
+import SupplierManagement from './components/SupplierManagement';
 import { setAuthToken, fetchUserRole } from './api';
 
 const App = () => {
@@ -17,7 +25,7 @@ const App = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const token = sessionStorage.getItem('token'); // Use sessionStorage
+        const token = sessionStorage.getItem('token');
         setAuthToken(token);
 
         if (token) {
@@ -44,10 +52,18 @@ const App = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
                 <Route path="/login" element={<PublicRoute><Login setRole={setRole} /></PublicRoute>} />
+                <Route path="/profile" element={<ProtectedRoute role={role} allowedRoles={['admin', 'seller', 'supplier']}><Profile /></ProtectedRoute>} />
+                <Route path="/change-password" element={<ProtectedRoute role={role} allowedRoles={['admin', 'seller', 'supplier']}><ChangePasswordPage /></ProtectedRoute>} />
                 <Route path="/dashboard" element={<ProtectedRoute role={role} allowedRoles={['admin', 'seller', 'supplier']}><Dashboard /></ProtectedRoute>} />
-                <Route path="/admin" element={<ProtectedRoute role={role} allowedRoles={['admin']}><AdminPage /></ProtectedRoute>} />
+                {/* <Route path="/admin" element={<ProtectedRoute role={role} allowedRoles={['admin']}><AdminPage /></ProtectedRoute>} /> */}
                 <Route path="/seller" element={<ProtectedRoute role={role} allowedRoles={['seller']}><SellerPage /></ProtectedRoute>} />
                 <Route path="/supplier" element={<ProtectedRoute role={role} allowedRoles={['supplier']}><SupplierPage /></ProtectedRoute>} />
+                <Route path="/admin/users" element={<ProtectedRoute role={role} allowedRoles={['admin']}><UserManagement /></ProtectedRoute>} />
+                <Route path="/admin/products" element={<ProtectedRoute role={role} allowedRoles={['admin']}><ProductManagement apiEndpoint="/admin/products" /></ProtectedRoute>} />
+                <Route path="/admin/categories" element={<ProtectedRoute role={role} allowedRoles={['admin']}><CategoryManagement /></ProtectedRoute>} />
+                <Route path="/admin/brands" element={<ProtectedRoute role={role} allowedRoles={['admin']}><BrandManagement /></ProtectedRoute>} />
+                <Route path="/admin/sales" element={<ProtectedRoute role={role} allowedRoles={['admin']}><SalesManagement /></ProtectedRoute>} />
+                <Route path="/admin/suppliers" element={<ProtectedRoute role={role} allowedRoles={['admin']}><SupplierManagement /></ProtectedRoute>} />
                 <Route path="*" element={<Navigate to="/login" />} />
             </Routes>
         </Router>

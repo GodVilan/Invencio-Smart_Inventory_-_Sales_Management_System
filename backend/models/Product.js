@@ -5,6 +5,10 @@ const productSchema = new mongoose.Schema({
   description: { type: String },
   price: { type: Number, required: true },
   stock: { type: Number, required: true },
-});
+  category: { type: String, required: true },
+  brand: { type: String, required: true },
+  image: { type: String, required: true }, // Store Base64-encoded image as a string
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+}, { timestamps: true });
 
 module.exports = mongoose.model('Product', productSchema);
