@@ -25,7 +25,7 @@ const Login = ({ setRole }) => {
             setRole(role);
 
             // Navigate based on user role
-            if (role === 'admin') navigate('/admin');
+            if (role === 'admin') navigate('/dashboard');
             else if (role === 'seller') navigate('/seller');
             else if (role === 'supplier') navigate('/supplier');
         } catch (error) {

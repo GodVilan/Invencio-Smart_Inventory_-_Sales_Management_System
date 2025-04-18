@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Form, Row, Col, Pagination, Modal } from 'react-bootstrap';
+import { Card, Button, Form, Row, Col, Modal, InputGroup, FormControl, Container } from 'react-bootstrap';
 import { fetchFilteredProducts, deleteProduct, fetchCategories, fetchBrands, createProduct, updateProduct } from '../api';
 
 const ProductManagement = ({ apiEndpoint }) => {
@@ -7,24 +7,21 @@ const ProductManagement = ({ apiEndpoint }) => {
     const [categories, setCategories] = useState([]);
     const [brands, setBrands] = useState([]);
     const [filters, setFilters] = useState({ name: '', category: '', brand: '', minPrice: '', maxPrice: '' });
-    const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
     const [showModal, setShowModal] = useState(false);
-    const [currentProduct, setCurrentProduct] = useState({ name: '', category: '', brand: '', price: '', stock: '' });
+    const [currentProduct, setCurrentProduct] = useState(null);
     const [editing, setEditing] = useState(false);
 
     useEffect(() => {
         const loadProducts = async () => {
             try {
-                const data = await fetchFilteredProducts({ ...filters, page, apiEndpoint });
+                const data = await fetchFilteredProducts({ ...filters, apiEndpoint });
                 setProducts(data.products);
-                setTotalPages(data.pages);
             } catch (error) {
                 console.error('Error fetching products:', error);
             }
         };
         loadProducts();
-    }, [filters, page, apiEndpoint]);
+    }, [filters, apiEndpoint]);
 
     useEffect(() => {
         const loadCategoriesAndBrands = async () => {
@@ -43,6 +40,7 @@ const ProductManagement = ({ apiEndpoint }) => {
         try {
             await deleteProduct(id);
             setProducts(products.filter((product) => product._id !== id));
+            setShowModal(false);
         } catch (error) {
             console.error('Error deleting product:', error);
         }
@@ -50,10 +48,6 @@ const ProductManagement = ({ apiEndpoint }) => {
 
     const handleFilterChange = (e) => {
         setFilters({ ...filters, [e.target.name]: e.target.value });
-    };
-
-    const handlePageChange = (newPage) => {
-        setPage(newPage);
     };
 
     const convertToBase64 = (file) => {
@@ -87,7 +81,7 @@ const ProductManagement = ({ apiEndpoint }) => {
     
             setShowModal(false);
             setCurrentProduct({ name: '', category: '', brand: '', price: '', stock: '', image: '' });
-            const data = await fetchFilteredProducts({ ...filters, page, apiEndpoint });
+            const data = await fetchFilteredProducts({ ...filters, apiEndpoint });
             setProducts(data.products);
         } catch (error) {
             console.error('Error saving product:', error);
@@ -95,13 +89,13 @@ const ProductManagement = ({ apiEndpoint }) => {
     };
 
     return (
-        <div>
-            <Button className="mb-3" onClick={() => { setShowModal(true); setEditing(false); }}>
-                Add Product
-            </Button>
+        <Container>
+            <h1 className="text-center my-4">Product Management</h1>
+
+            {/* Filters Section */}
             <Form className="mb-4">
-                <Row>
-                    <Col>
+                <Row className="align-items-end">
+                    <Col md={3}>
                         <Form.Control
                             type="text"
                             name="name"
@@ -110,7 +104,7 @@ const ProductManagement = ({ apiEndpoint }) => {
                             onChange={handleFilterChange}
                         />
                     </Col>
-                    <Col>
+                    <Col md={3}>
                         <Form.Select name="category" value={filters.category} onChange={handleFilterChange}>
                             <option value="">All Categories</option>
                             {categories.map((category) => (
@@ -120,7 +114,7 @@ const ProductManagement = ({ apiEndpoint }) => {
                             ))}
                         </Form.Select>
                     </Col>
-                    <Col>
+                    <Col md={3}>
                         <Form.Select name="brand" value={filters.brand} onChange={handleFilterChange}>
                             <option value="">All Brands</option>
                             {brands.map((brand) => (
@@ -130,171 +124,224 @@ const ProductManagement = ({ apiEndpoint }) => {
                             ))}
                         </Form.Select>
                     </Col>
-                    <Col>
-                        <Form.Control
-                            type="number"
-                            name="minPrice"
-                            placeholder="Min price"
-                            value={filters.minPrice}
-                            onChange={handleFilterChange}
-                        />
-                    </Col>
-                    <Col>
-                        <Form.Control
-                            type="number"
-                            name="maxPrice"
-                            placeholder="Max price"
-                            value={filters.maxPrice}
-                            onChange={handleFilterChange}
-                        />
+                    <Col md={3}>
+                        <InputGroup>
+                            <FormControl
+                                type="number"
+                                name="minPrice"
+                                placeholder="Min price"
+                                value={filters.minPrice}
+                                onChange={handleFilterChange}
+                            />
+                            <FormControl
+                                type="number"
+                                name="maxPrice"
+                                placeholder="Max price"
+                                value={filters.maxPrice}
+                                onChange={handleFilterChange}
+                            />
+                        </InputGroup>
                     </Col>
                 </Row>
             </Form>
-            {/* Correctly Nest the Table */}
-            <Table striped bordered hover>
-                <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Category</th>
-                        <th>Brand</th>
-                        <th>Price</th>
-                        <th>Stock</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {products.map((product) => (
-                        <tr key={product._id}>
-                            <td>
-                                {product.image && (
-                                    <img
-                                        src={product.image} // Use Base64-encoded image
-                                        alt={product.name}
-                                        style={{ width: '50px', height: '50px' }}
-                                    />
-                                )}
-                            </td>
-                            <td>{product.name}</td>
-                            <td>{product.category}</td>
-                            <td>{product.brand}</td>
-                            <td>{product.price}</td>
-                            <td>{product.stock}</td>
-                            <td>
-                                <Button
-                                    variant="warning"
-                                    size="sm"
-                                    className="me-2"
-                                    onClick={() => {
-                                        setCurrentProduct(product);
-                                        setEditing(true);
-                                        setShowModal(true);
-                                    }}
-                                >
-                                    Edit
-                                </Button>
-                                <Button
-                                    variant="danger"
-                                    size="sm"
-                                    onClick={() => handleDeleteProduct(product._id)}
-                                >
-                                    Delete
-                                </Button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>
-            <Pagination className="mt-4">
-                {[...Array(totalPages).keys()].map((x) => (
-                    <Pagination.Item
-                        key={x + 1}
-                        active={x + 1 === page}
-                        onClick={() => handlePageChange(x + 1)}
-                    >
-                        {x + 1}
-                    </Pagination.Item>
-                ))}
-            </Pagination>
 
-            <Modal show={showModal} onHide={() => setShowModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>{editing ? 'Edit Product' : 'Add Product'}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={currentProduct.name}
-                                onChange={(e) => setCurrentProduct({ ...currentProduct, name: e.target.value })}
+            <Button
+                className="mb-4"
+                onClick={() => {
+                    setCurrentProduct({ name: '', description: '', category: '', brand: '', price: '', stock: '', image: '' });
+                    setEditing(false);
+                    setShowModal(true);
+                }}
+            >
+                Add Product
+            </Button>
+
+            {/* Product Cards */}
+            <Row>
+                {products.map((product) => (
+                    <Col md={4} sm={6} xs={12} className="mb-4" key={product._id}>
+                        <Card className="shadow-sm h-100">
+                            <Card.Img
+                                variant="top"
+                                src={product.image}
+                                alt={product.name}
+                                style={{ height: '200px', objectFit: 'cover' }}
                             />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Category</Form.Label>
-                            <Form.Select
-                                value={currentProduct.category}
-                                onChange={(e) => setCurrentProduct({ ...currentProduct, category: e.target.value })}
-                            >
-                                <option value="">Select Category</option>
-                                {categories.map((category) => (
-                                    <option key={category._id} value={category._id}>
-                                        {category.name}
-                                    </option>
-                                ))}
-                            </Form.Select>
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Brand</Form.Label>
-                            <Form.Select
-                                value={currentProduct.brand}
-                                onChange={(e) => setCurrentProduct({ ...currentProduct, brand: e.target.value })}
-                            >
-                                <option value="">Select Brand</option>
-                                {brands.map((brand) => (
-                                    <option key={brand._id} value={brand._id}>
-                                        {brand.name}
-                                    </option>
-                                ))}
-                            </Form.Select>
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Price</Form.Label>
-                            <Form.Control
-                                type="number"
-                                value={currentProduct.price}
-                                onChange={(e) => setCurrentProduct({ ...currentProduct, price: e.target.value })}
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Stock</Form.Label>
-                            <Form.Control
-                                type="number"
-                                value={currentProduct.stock}
-                                onChange={(e) => setCurrentProduct({ ...currentProduct, stock: e.target.value })}
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Image</Form.Label>
-                            <Form.Control
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => setCurrentProduct({ ...currentProduct, image: e.target.files[0] })}
-                            />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowModal(false)}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={handleSaveProduct}>
-                        Save
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        </div>
+                            <Card.Body>
+                                <Card.Title>{product.name}</Card.Title>
+                                <Card.Text>
+                                    <strong>Price:</strong> ${product.price} <br />
+                                    <strong>Category:</strong> {product.category?.name || 'N/A'} <br />
+                                    <strong>Brand:</strong> {product.brand?.name || 'N/A'}
+                                </Card.Text>
+                                <div className="d-flex justify-content-end">
+                                    <Button
+                                        variant="link"
+                                        onClick={() => {
+                                            setCurrentProduct(product);
+                                            setEditing(false); // Ensure it's in view mode
+                                            setShowModal(true);
+                                        }}
+                                    >
+                                        View
+                                    </Button>
+                                </div>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                ))}
+            </Row>
+
+            {/* View/Add/Edit Product Modal */}
+                {currentProduct && (
+                    <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+                        <Modal.Header closeButton>
+                            <Modal.Title>
+                                {editing ? 'Edit Product' : currentProduct._id ? 'Product Details' : 'Add Product'}
+                            </Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            {editing || !currentProduct._id ? (
+                                // Add/Edit Form
+                                <Form>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label>Name</Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            value={currentProduct.name}
+                                            onChange={(e) => setCurrentProduct({ ...currentProduct, name: e.target.value })}
+                                        />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label>Description</Form.Label>
+                                        <Form.Control
+                                            as="textarea"
+                                            rows={3}
+                                            value={currentProduct.description}
+                                            onChange={(e) => setCurrentProduct({ ...currentProduct, description: e.target.value })}
+                                        />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label>Category</Form.Label>
+                                        <Form.Select
+                                            value={currentProduct.category}
+                                            onChange={(e) => setCurrentProduct({ ...currentProduct, category: e.target.value })}
+                                        >
+                                            <option value="">Select Category</option>
+                                            {categories.map((category) => (
+                                                <option key={category._id} value={category._id}>
+                                                    {category.name}
+                                                </option>
+                                            ))}
+                                        </Form.Select>
+                                    </Form.Group>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label>Brand</Form.Label>
+                                        <Form.Select
+                                            value={currentProduct.brand}
+                                            onChange={(e) => setCurrentProduct({ ...currentProduct, brand: e.target.value })}
+                                        >
+                                            <option value="">Select Brand</option>
+                                            {brands.map((brand) => (
+                                                <option key={brand._id} value={brand._id}>
+                                                    {brand.name}
+                                                </option>
+                                            ))}
+                                        </Form.Select>
+                                    </Form.Group>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label>Price</Form.Label>
+                                        <Form.Control
+                                            type="number"
+                                            value={currentProduct.price}
+                                            onChange={(e) => setCurrentProduct({ ...currentProduct, price: e.target.value })}
+                                        />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label>Stock</Form.Label>
+                                        <Form.Control
+                                            type="number"
+                                            value={currentProduct.stock}
+                                            onChange={(e) => setCurrentProduct({ ...currentProduct, stock: e.target.value })}
+                                        />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label>Image</Form.Label>
+                                        <Form.Control
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => setCurrentProduct({ ...currentProduct, image: e.target.files[0] })}
+                                        />
+                                    </Form.Group>
+                                </Form>
+                            ) : (
+                                // View Mode
+                                <>
+                                    <div className="text-center">
+                                        <img
+                                            src={currentProduct.image}
+                                            alt={currentProduct.name}
+                                            style={{ maxWidth: '100%', maxHeight: '300px', objectFit: 'contain', marginBottom: '20px' }}
+                                        />
+                                        <h3 className="mt-3">{currentProduct.name}</h3>
+                                    </div>
+                                    <hr />
+                                    <p>
+                                        <strong>Description:</strong>{' '}
+                                        {currentProduct.description ? (
+                                            currentProduct.description.split('\n').map((line, index) => (
+                                                <span key={index}>
+                                                    {line}
+                                                    <br />
+                                                </span>
+                                            ))
+                                        ) : (
+                                            'N/A'
+                                        )}
+                                    </p>
+                                    <p>
+                                        <strong>Price:</strong> ${currentProduct.price}
+                                    </p>
+                                    <p>
+                                        <strong>Category:</strong> {currentProduct.category?.name || 'N/A'}
+                                    </p>
+                                    <p>
+                                        <strong>Brand:</strong> {currentProduct.brand?.name || 'N/A'}
+                                    </p>
+                                    <p>
+                                        <strong>Stock:</strong> {currentProduct.stock}
+                                    </p>
+                                </>
+                            )}
+                        </Modal.Body>
+                        <Modal.Footer>
+                            {editing || !currentProduct._id ? (
+                                <Button variant="primary" onClick={handleSaveProduct}>
+                                    Save
+                                </Button>
+                            ) : (
+                                <>
+                                    <Button
+                                        variant="danger"
+                                        onClick={() => handleDeleteProduct(currentProduct._id)}
+                                    >
+                                        Delete
+                                    </Button>
+                                    <Button
+                                        variant="warning"
+                                        onClick={() => {
+                                            setEditing(true); // Switch to edit mode
+                                            setShowModal(true); // Ensure the modal remains open
+                                        }}
+                                    >
+                                        Edit
+                                    </Button>
+                                </>
+                            )}
+                        </Modal.Footer>
+                    </Modal>
+                )}
+        </Container>
     );
 };
 

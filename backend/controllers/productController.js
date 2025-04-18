@@ -17,11 +17,12 @@ exports.createProduct = async (req, res) => {
         res.status(500).json({ message: 'Failed to create product', error: error.message });
     }
 };
-
 // Get all products
 exports.getProducts = async (req, res) => {
     try {
-        const products = await Product.find();
+        const products = await Product.find()
+            .populate('category', 'name') // Populate category name
+            .populate('brand', 'name'); // Populate brand name
         res.json(products);
     } catch (error) {
         res.status(500).json({ message: 'Failed to fetch products', error: error.message });
@@ -61,23 +62,6 @@ exports.deleteProduct = async (req, res) => {
 
 // Get filtered products
 exports.getFilteredProducts = async (req, res) => {
-    const { name, category, minPrice, maxPrice } = req.query;
-
-    const filter = {};
-    if (name) filter.name = { $regex: name, $options: 'i' }; // Case-insensitive search
-    if (category) filter.category = category;
-    if (minPrice) filter.price = { ...filter.price, $gte: Number(minPrice) };
-    if (maxPrice) filter.price = { ...filter.price, $lte: Number(maxPrice) };
-
-    try {
-        const products = await Product.find(filter);
-        res.json(products);
-    } catch (error) {
-        res.status(500).json({ message: 'Failed to fetch filtered products', error: error.message });
-    }
-};
-
-exports.getFilteredProducts = async (req, res) => {
     const { name, category, brand, minPrice, maxPrice, page = 1, limit = 10 } = req.query;
 
     const filter = {};
@@ -89,6 +73,8 @@ exports.getFilteredProducts = async (req, res) => {
 
     try {
         const products = await Product.find(filter)
+            .populate('category', 'name') // Populate category name
+            .populate('brand', 'name') // Populate brand name
             .skip((page - 1) * limit)
             .limit(Number(limit));
         const total = await Product.countDocuments(filter);
