@@ -9,6 +9,7 @@ const sellerRoutes = require('./routes/sellerRoutes');
 const userRoutes = require('./routes/userRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const brandRoutes = require('./routes/brandRoutes');
+const adminRoutes = require('./routes/adminRoutes'); // Import admin routes
 
 dotenv.config();
 connectDB();
@@ -22,14 +23,18 @@ app.use(express.json());
 
 // API routes
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/admin/products', productRoutes); // RBAC applied in productRoutes
 app.use('/api/admin/sales', salesRoutes); // RBAC applied in salesRoutes
-app.use('/api/admin/suppliers', supplierRoutes); // RBAC applied in supplierRoutes
+app.use('/api/admin/supplier', supplierRoutes); // RBAC applied in supplierRoutes
 app.use('/api/seller', sellerRoutes); // Register seller-specific routes
+app.use('api/seller/products', productRoutes); // Register seller-specific routes
 app.use('/api/admin/users', userRoutes); // Register user-specific routes
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/sales', salesRoutes); // Register sales-specific routes
 app.use('/api/brands', brandRoutes);
+app.use('/api/supplier', supplierRoutes); // Register supplier-specific routes
 
 // Default route for root URL
 app.get('/', (req, res) => {

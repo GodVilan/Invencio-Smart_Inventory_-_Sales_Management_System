@@ -88,6 +88,19 @@ const ProductManagement = ({ apiEndpoint }) => {
         }
     };
 
+    // const handleBulkStockUpdate = async () => {
+    //     try {
+    //         const updates = products.map((product) => ({
+    //             productId: product._id,
+    //             stock: product.newStock || 0, // Assume `newStock` is added via UI
+    //         }));
+    //         await api.put('/admin/products/bulk-update', updates);
+    //         alert('Stock updated successfully');
+    //     } catch (error) {
+    //         console.error('Error updating stock:', error);
+    //     }
+    // };
+
     return (
         <Container>
             <h1 className="text-center my-4">Product Management</h1>
@@ -165,7 +178,7 @@ const ProductManagement = ({ apiEndpoint }) => {
                                 variant="top"
                                 src={product.image}
                                 alt={product.name}
-                                style={{ height: '200px', objectFit: 'cover' }}
+                                style={{ height: '100%', objectFit: 'fill' }}
                             />
                             <Card.Body>
                                 <Card.Title>{product.name}</Card.Title>

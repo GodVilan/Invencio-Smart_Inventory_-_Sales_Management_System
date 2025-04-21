@@ -1,26 +1,42 @@
-import React from 'react';
-import { Row, Col, Card } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { fetchSellerDashboardData } from '../api';
 
-const SellerDashboard = ({ data }) => {
+const SellerDashboard = () => {
+    const [data, setData] = useState(null);
+
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                const dashboardData = await fetchSellerDashboardData();
+                setData(dashboardData);
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        };
+
+        loadData();
+    }, []);
+
+    if (!data) return <div>Loading...</div>;
+
     return (
-        <Row>
-            <Col md={6}>
-                <Card className="mb-4 shadow-sm">
-                    <Card.Body>
-                        <Card.Title>Total Sales</Card.Title>
-                        <Card.Text>{data?.totalSales || 'N/A'}</Card.Text>
-                    </Card.Body>
-                </Card>
-            </Col>
-            <Col md={6}>
-                <Card className="mb-4 shadow-sm">
-                    <Card.Body>
-                        <Card.Title>Top-Selling Products</Card.Title>
-                        <Card.Text>{data?.topProducts?.join(', ') || 'N/A'}</Card.Text>
-                    </Card.Body>
-                </Card>
-            </Col>
-        </Row>
+        <div>
+            <h3>Seller Dashboard</h3>
+            <p>Total Sales: {data.totalSales || 0}</p> {/* Fallback to 0 */}
+            <p>Total Revenue: ${data.totalRevenue?.toFixed(2) || '0.00'}</p> {/* Fallback to 0.00 */}
+            <h4>Top-Selling Products</h4>
+            <ul>
+                {data.topSellingProducts.length > 0 ? (
+                    data.topSellingProducts.map((product, index) => (
+                        <li key={index}>
+                            {product.name} - {product.sales} units sold
+                        </li>
+                    ))
+                ) : (
+                    <li>No top-selling products available</li>
+                )}
+            </ul>
+        </div>
     );
 };
 

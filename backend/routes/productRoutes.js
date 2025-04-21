@@ -25,4 +25,20 @@ router.delete('/:id', protect, authorize(['admin']), deleteProduct);
 // All roles can search and filter products
 router.get('/search', protect, authorize(['admin', 'seller', 'supplier']), getFilteredProducts);
 
+router.put('/bulk-update', protect, authorize(['admin']), async (req, res) => {
+    try {
+        const updates = req.body; // Array of { productId, stock }
+        const bulkOps = updates.map((update) => ({
+            updateOne: {
+                filter: { _id: update.productId },
+                update: { $inc: { stock: update.stock } },
+            },
+        }));
+        await Product.bulkWrite(bulkOps);
+        res.status(200).json({ message: 'Stock updated successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to update stock', error: error.message });
+    }
+});
+
 module.exports = router;

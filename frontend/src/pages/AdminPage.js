@@ -2,8 +2,8 @@ import React from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import UserManagement from '../components/UserManagement';
 import ProductManagement from '../components/ProductManagement';
-import SalesManagement from '../components/SalesManagement';
-import SupplierManagement from '../components/SupplierManagement';
+import AdminSalesManagement from '../components/AdminSalesManagement';
+import AdminSupplierManagement from '../components/AdminSupplierManagement';
 import CategoryManagement from '../components/CategoryManagement';
 import BrandManagement from '../components/BrandManagement';
 
@@ -52,7 +52,7 @@ const AdminPage = () => {
                     <Card className="mb-4 shadow-sm">
                         <Card.Body>
                             <Card.Title>Sales Management</Card.Title>
-                            <SalesManagement />
+                            <AdminSalesManagement />
                         </Card.Body>
                     </Card>
                 </Col>
@@ -60,7 +60,7 @@ const AdminPage = () => {
                     <Card className="mb-4 shadow-sm">
                         <Card.Body>
                             <Card.Title>Supplier Management</Card.Title>
-                            <SupplierManagement />
+                            <AdminSupplierManagement />
                         </Card.Body>
                     </Card>
                 </Col>

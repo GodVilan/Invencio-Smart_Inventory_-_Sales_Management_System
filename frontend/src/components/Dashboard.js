@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Container, Spinner, Alert } from 'react-bootstrap';
 import AdminDashboard from './AdminDashboard';
 import SellerDashboard from './SellerDashboard';
 import SupplierDashboard from './SupplierDashboard';
+import { fetchUserRole, fetchAdminDashboardData, fetchSellerDashboardData, fetchSupplierDashboardData } from '../api';
 
 const Dashboard = () => {
     const [role, setRole] = useState('');
@@ -13,16 +13,11 @@ const Dashboard = () => {
 
     useEffect(() => {
         const fetchRole = async () => {
-            const token = sessionStorage.getItem('token');
-            if (token) {
-                try {
-                    const response = await axios.get('http://localhost:5050/api/auth/me', {
-                        headers: { Authorization: `Bearer ${token}` },
-                    });
-                    setRole(response.data.role);
-                } catch (error) {
-                    setError('Failed to fetch user role.');
-                }
+            try {
+                const userRole = await fetchUserRole();
+                setRole(userRole);
+            } catch (error) {
+                setError('Failed to fetch user role.');
             }
         };
 
@@ -35,13 +30,13 @@ const Dashboard = () => {
                 try {
                     let response;
                     if (role === 'admin') {
-                        response = await axios.get('http://localhost:5050/api/admin/dashboard');
+                        response = await fetchAdminDashboardData();
                     } else if (role === 'seller') {
-                        response = await axios.get('http://localhost:5050/api/seller/dashboard');
+                        response = await fetchSellerDashboardData();
                     } else if (role === 'supplier') {
-                        response = await axios.get('http://localhost:5050/api/supplier/dashboard');
+                        response = await fetchSupplierDashboardData();
                     }
-                    setData(response.data);
+                    setData(response);
                 } catch (error) {
                     setError('Failed to fetch dashboard data.');
                 } finally {

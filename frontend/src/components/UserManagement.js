@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Form } from 'react-bootstrap';
-import { fetchUsers, createUser, deleteUser } from '../api';
+import { fetchUsers, createUser, deleteUser, updateUser } from '../api';
 
 const UserManagement = () => {
     const [users, setUsers] = useState([]);
@@ -38,6 +38,15 @@ const UserManagement = () => {
         }
     };
 
+    const handleUpdateUserRole = async (id, newRole) => {
+        try {
+            const updatedUser = await updateUser(id, { role: newRole });
+            setUsers(users.map((user) => (user._id === id ? updatedUser : user)));
+        } catch (error) {
+            console.error('Error updating user role:', error);
+        }
+    };
+
     return (
         <>
             <Button variant="primary" className="mb-3" onClick={() => setShow(true)}>
@@ -58,6 +67,16 @@ const UserManagement = () => {
                             <td>{user.name}</td>
                             <td>{user.email}</td>
                             <td>{user.role}</td>
+                            <td>
+                                <Form.Select
+                                    value={user.role}
+                                    onChange={(e) => handleUpdateUserRole(user._id, e.target.value)}
+                                >
+                                    <option value="admin">Admin</option>
+                                    <option value="seller">Seller</option>
+                                    <option value="supplier">Supplier</option>
+                                </Form.Select>
+                            </td>
                             <td>
                                 <Button
                                     variant="danger"

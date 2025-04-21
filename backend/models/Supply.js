@@ -4,7 +4,7 @@ const supplySchema = new mongoose.Schema(
     {
         supplierId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
+            ref: 'Supplier',
             required: true,
         },
         productId: {

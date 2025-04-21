@@ -3,25 +3,28 @@ const {
     createSupplier,
     getSuppliers,
     getSupplierDashboard,
+    getSupplierAnalytics,
+    getSupplierProfile,
+    getSupplierProducts,
     updateSupplier,
     deleteSupplier,
+    updateSupplierProfile,
 } = require('../controllers/supplierController');
+
 const { protect, authorize } = require('../middleware/authMiddleware');
 const router = express.Router();
 
-// Only admin can create suppliers
+// 🔐 Admin-only routes
 router.post('/', protect, authorize(['admin']), createSupplier);
-
-// Admin and supplier can view suppliers
 router.get('/', protect, authorize(['admin', 'supplier']), getSuppliers);
-
-// Supplier dashboard route
-router.get('/', protect, authorize(['supplier']), getSupplierDashboard);
-
-// Only admin can update a supplier
 router.put('/:id', protect, authorize(['admin']), updateSupplier);
-
-// Only admin can delete a supplier
 router.delete('/:id', protect, authorize(['admin']), deleteSupplier);
+
+// 👤 Supplier-only routes
+router.get('/dashboard', protect, authorize(['supplier']), getSupplierDashboard);
+router.get('/profile', protect, authorize(['supplier']), getSupplierProfile); // Ensure this route exists
+router.get('/products', protect, authorize(['supplier']), getSupplierProducts); // Ensure this route exists
+router.get('/analytics', protect, authorize(['supplier']), getSupplierAnalytics);
+router.put('/profile', protect, authorize(['supplier']), updateSupplierProfile);
 
 module.exports = router;

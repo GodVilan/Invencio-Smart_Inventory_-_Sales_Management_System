@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Form, Spinner, Alert, Image } from 'react-bootstrap';
-import { fetchSales2, createSale2, deleteSale2, updateSale2, fetchProducts2, fetchSalesReport2 } from '../api';
-
+import { fetchSales, createSale, deleteSale, updateSale, fetchProducts, fetchSalesReport } from '../api';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
-const SalesManagement = () => {
+const AdminSalesManagement = () => {
     const [sales, setSales] = useState([]);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -18,7 +17,7 @@ const SalesManagement = () => {
     useEffect(() => {
         const loadSalesAndProducts = async () => {
             try {
-                const [salesData, productsData] = await Promise.all([fetchSales2(), fetchProducts2()]);
+                const [salesData, productsData] = await Promise.all([fetchSales(), fetchProducts()]);
                 setSales(salesData);
                 setProducts(productsData);
             } catch (error) {
@@ -34,7 +33,7 @@ const SalesManagement = () => {
 
     const handleDeleteSale = async (id) => {
         try {
-            await deleteSale2(id);
+            await deleteSale(id);
             setSales(sales.filter((sale) => sale._id !== id));
         } catch (error) {
             console.error('Error deleting sale:', error);
@@ -46,11 +45,11 @@ const SalesManagement = () => {
         try {
             if (currentSale._id) {
                 // Update existing sale
-                const updatedSale = await updateSale2(currentSale._id, currentSale);
+                const updatedSale = await updateSale(currentSale._id, currentSale);
                 setSales(sales.map((sale) => (sale._id === updatedSale._id ? updatedSale : sale)));
             } else {
                 // Create new sale
-                const newSale = await createSale2(currentSale);
+                const newSale = await createSale(currentSale);
                 setSales([...sales, newSale]);
             }
             setShowModal(false);
@@ -73,12 +72,16 @@ const SalesManagement = () => {
 
     const handleGenerateReport = async () => {
         try {
-            const reportData = await fetchSalesReport2();
+            const reportData = await fetchSalesReport();
             setReport(reportData);
 
             // Generate PDF
             const doc = new jsPDF();
-            doc.text('Sales Report', 14, 10);
+            
+            console.log("Type");
+            console.log(typeof doc.autoTable); // Should log "function"
+            
+            doc.text('Admin Sales Report', 14, 10);
             doc.autoTable({
                 head: [['Period', 'Total Sales', 'Total Quantity']],
                 body: reportData.map((entry) => [
@@ -89,7 +92,7 @@ const SalesManagement = () => {
             });
 
             // Save the PDF
-            doc.save('Sales_Report.pdf');
+            doc.save('Admin_Sales_Report.pdf');
         } catch (error) {
             console.error('Error generating sales report:', error);
             setError('Failed to generate sales report.');
@@ -97,8 +100,12 @@ const SalesManagement = () => {
     };
 
     const handleQuantityChange = (quantity) => {
-        const product = products.find((p) => p._id === currentSale.productId);
-        const price = product ? product.price : 0;
+        // Resolve the product based on the productId in currentSale
+        const product = products.find((p) => 
+            p._id === (typeof currentSale.productId === 'object' ? currentSale.productId._id : currentSale.productId)
+        );
+    
+        const price = product ? product.price : 0; // Get the price of the product
         setCurrentSale({ ...currentSale, quantity, totalAmount: quantity * price });
     };
 
@@ -132,7 +139,6 @@ const SalesManagement = () => {
         return <Alert variant="danger">{error}</Alert>;
     }
 
-    // Add a section to display the sales report
     return (
         <div>
             <div className="d-flex justify-content-between align-items-center mb-3">
@@ -211,31 +217,6 @@ const SalesManagement = () => {
                 </tbody>
             </Table>
 
-            {/* Display the sales report */}
-            {report && (
-                <div className="mt-4">
-                    <h4>Sales Report</h4>
-                    <Table striped bordered hover>
-                        <thead>
-                            <tr>
-                                <th>Period</th>
-                                <th>Total Sales</th>
-                                <th>Total Quantity</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {report.map((entry, index) => (
-                                <tr key={index}>
-                                    <td>{entry._id}</td>
-                                    <td>${entry.totalSales.toFixed(2)}</td>
-                                    <td>{entry.totalQuantity}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </Table>
-                </div>
-            )}
-
             {/* Add/Edit Sale Modal */}
             <Modal show={showModal} onHide={() => setShowModal(false)} centered>
                 <Modal.Header closeButton>
@@ -288,4 +269,4 @@ const SalesManagement = () => {
     );
 };
 
-export default SalesManagement;
+export default AdminSalesManagement;

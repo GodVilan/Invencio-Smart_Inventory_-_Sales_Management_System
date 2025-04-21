@@ -16,8 +16,11 @@ import UserManagement from './components/UserManagement';
 import ProductManagement from './components/ProductManagement';
 import CategoryManagement from './components/CategoryManagement';
 import BrandManagement from './components/BrandManagement';
-import SalesManagement from './components/SalesManagement';
-import SupplierManagement from './components/SupplierManagement';
+import AdminSalesManagement from './components/AdminSalesManagement';
+// import SupplierManagement from './components/SupplierManagement';
+import AdminSupplierManagement from './components/AdminSupplierManagement';
+import './App.css';
+import SupplierDashboard from './components/SupplierDashboard';
 import { setAuthToken, fetchUserRole } from './api';
 
 const App = () => {
@@ -58,12 +61,13 @@ const App = () => {
                 {/* <Route path="/admin" element={<ProtectedRoute role={role} allowedRoles={['admin']}><AdminPage /></ProtectedRoute>} /> */}
                 <Route path="/seller" element={<ProtectedRoute role={role} allowedRoles={['seller']}><SellerPage /></ProtectedRoute>} />
                 <Route path="/supplier" element={<ProtectedRoute role={role} allowedRoles={['supplier']}><SupplierPage /></ProtectedRoute>} />
+                <Route path = "/supplier-dashborad" element={<ProtectedRoute role={role} allowedRoles={['supplier']}><SupplierDashboard /></ProtectedRoute>} />
                 <Route path="/admin/users" element={<ProtectedRoute role={role} allowedRoles={['admin']}><UserManagement /></ProtectedRoute>} />
                 <Route path="/admin/products" element={<ProtectedRoute role={role} allowedRoles={['admin']}><ProductManagement apiEndpoint="/admin/products" /></ProtectedRoute>} />
                 <Route path="/admin/categories" element={<ProtectedRoute role={role} allowedRoles={['admin']}><CategoryManagement /></ProtectedRoute>} />
                 <Route path="/admin/brands" element={<ProtectedRoute role={role} allowedRoles={['admin']}><BrandManagement /></ProtectedRoute>} />
-                <Route path="/admin/sales" element={<ProtectedRoute role={role} allowedRoles={['admin']}><SalesManagement /></ProtectedRoute>} />
-                <Route path="/admin/suppliers" element={<ProtectedRoute role={role} allowedRoles={['admin']}><SupplierManagement /></ProtectedRoute>} />
+                <Route path="/admin/sales" element={<ProtectedRoute role={role} allowedRoles={['admin']}><AdminSalesManagement /></ProtectedRoute>} />
+                <Route path="/admin/suppliers" element={<ProtectedRoute role={role} allowedRoles={['admin']}><AdminSupplierManagement /></ProtectedRoute>} />
                 <Route path="*" element={<Navigate to="/login" />} />
             </Routes>
         </Router>

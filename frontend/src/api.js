@@ -34,12 +34,44 @@ export const fetchUserRole = async () => {
     }
 };
 
+
+// Dashboard APIs
+export const fetchAdminDashboardData = async () => {
+    try {
+        const response = await api.get('/admin/dashboard');
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching admin dashboard data:', error);
+        throw error;
+    }
+};
+
+export const fetchSellerDashboardData = async () => {
+    try {
+        const response = await api.get('/seller/dashboard'); // Seller-specific endpoint
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching seller dashboard data:', error);
+        throw error;
+    }
+};
+
+
+export const fetchSupplierDashboardData = async () => {
+    try {
+        const response = await api.get('/supplier/dashboard'); // Matches backend route
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching supplier dashboard data:', error);
+        throw error;
+    }
+};
 //
 // Supplier Management APIs
 //
-export const fetchSuppliers = async () => {
+export const fetchSuppliers1 = async () => {
     try {
-        const response = await api.get('/admin/suppliers'); // Corrected endpoint
+        const response = await api.get('/admin/supplier'); // Corrected endpoint
         return response.data;
     } catch (error) {
         console.error('Error fetching suppliers:', error);
@@ -49,7 +81,7 @@ export const fetchSuppliers = async () => {
 
 export const createSupplier = async (supplierData) => {
     try {
-        const response = await api.post('/admin/suppliers', supplierData); // Corrected endpoint
+        const response = await api.post('/admin/supplier', supplierData); // Matches backend route
         return response.data;
     } catch (error) {
         console.error('Error creating supplier:', error);
@@ -59,7 +91,7 @@ export const createSupplier = async (supplierData) => {
 
 export const updateSupplier = async (id, supplierData) => {
     try {
-        const response = await api.put(`/admin/suppliers/${id}`, supplierData); // Corrected endpoint
+        const response = await api.put(`/admin/supplier/${id}`, supplierData); // Corrected endpoint
         return response.data;
     } catch (error) {
         console.error('Error updating supplier:', error);
@@ -69,10 +101,61 @@ export const updateSupplier = async (id, supplierData) => {
 
 export const deleteSupplier = async (id) => {
     try {
-        const response = await api.delete(`/admin/suppliers/${id}`); // Corrected endpoint
+        const response = await api.delete(`/admin/supplier/${id}`); // Corrected endpoint
         return response.data;
     } catch (error) {
         console.error('Error deleting supplier:', error);
+        throw error;
+    }
+};
+
+// Supplier APIs
+
+export const fetchSuppliers2 = async () => {
+    try {
+        const response = await api.get('/supplier'); // Corrected endpoint
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching suppliers:', error);
+        throw error;
+    }
+};
+export const fetchSupplierProfile = async () => {
+    try {
+        const response = await api.get('/supplier/profile'); // Ensure this matches the backend route
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching supplier profile:', error);
+        throw error;
+    }
+};
+
+export const fetchSupplierProducts = async () => {
+    try {
+        const response = await api.get('/supplier/products'); // Ensure this matches the backend route
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching supplier products:', error);
+        throw error;
+    }
+};
+
+export const updateSupplierProfile = async (profileData) => {
+    try {
+        const response = await api.put('/supplier/profile', profileData);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating supplier profile:', error);
+        throw error;
+    }
+};
+
+export const fetchSupplierAnalytics = async () => {
+    try {
+        const response = await api.get('/supplier/analytics'); // Matches backend route
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching supplier analytics:', error);
         throw error;
     }
 };
@@ -120,12 +203,20 @@ export const deleteProduct = async (id) => {
     }
 };
 
-//
 // Sales Management APIs
-//
 export const fetchSales = async () => {
     try {
-        const response = await api.get('/admin/sales'); // Corrected endpoint
+        const response = await api.get('/admin/sales'); // Admin-specific endpoint
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching sales:', error);
+        throw error;
+    }
+};
+
+export const fetchSales2 = async () => {
+    try {
+        const response = await api.get('/sales/seller'); // Seller-specific endpoint
         return response.data;
     } catch (error) {
         console.error('Error fetching sales:', error);
@@ -135,7 +226,17 @@ export const fetchSales = async () => {
 
 export const createSale = async (saleData) => {
     try {
-        const response = await api.post('/admin/sales', saleData); // Corrected endpoint
+        const response = await api.post('/admin/sales', saleData); // Admin-specific endpoint
+        return response.data;
+    } catch (error) {
+        console.error('Error creating sale:', error);
+        throw error;
+    }
+};
+
+export const createSale2 = async (saleData) => {
+    try {
+        const response = await api.post('/sales', saleData); // Seller-specific endpoint
         return response.data;
     } catch (error) {
         console.error('Error creating sale:', error);
@@ -145,13 +246,74 @@ export const createSale = async (saleData) => {
 
 export const deleteSale = async (id) => {
     try {
-        const response = await api.delete(`/admin/sales/${id}`); // Corrected endpoint
+        const response = await api.delete(`/admin/sales/${id}`); // Admin-specific endpoint
         return response.data;
     } catch (error) {
         console.error('Error deleting sale:', error);
         throw error;
     }
 };
+
+export const deleteSale2 = async (id) => {
+    try {
+        const response = await api.delete(`/sales/${id}`); // Seller-specific endpoint
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting sale:', error);
+        throw error;
+    }
+};
+
+export const updateSale = async (id, saleData) => {
+    try {
+        const response = await api.put(`/admin/sales/${id}`, saleData); // Admin-specific endpoint
+        return response.data;
+    } catch (error) {
+        console.error('Error updating sale:', error);
+        throw error;
+    }
+};
+
+export const updateSale2 = async (id, saleData) => {
+    try {
+        const response = await api.put(`/sales/${id}`, saleData); // Seller-specific endpoint
+        return response.data;
+    } catch (error) {
+        console.error('Error updating sale:', error);
+        throw error;
+    }
+};
+
+export const fetchSalesReport = async () => {
+    try {
+        const response = await api.get('/admin/sales/report'); // Admin-specific endpoint
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching sales report:', error);
+        throw error;
+    }
+};
+
+export const fetchSalesReport2 = async () => {
+    try {
+        const response = await api.get('/sales/report'); // Seller-specific endpoint
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching sales report:', error);
+        throw error;
+    }
+};
+
+export const fetchProducts2 = async () => {
+    try {
+        const response = await api.get('/products'); // Corrected endpoint
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        throw error;
+    }
+};
+
 
 //
 // User Management APIs

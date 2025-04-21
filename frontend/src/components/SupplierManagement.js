@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button } from 'react-bootstrap';
-import { fetchSuppliers, deleteSupplier } from '../api';
+import { fetchSuppliers2, deleteSupplier } from '../api';
 
 const SupplierManagement = () => {
     const [suppliers, setSuppliers] = useState([]);
@@ -8,7 +8,7 @@ const SupplierManagement = () => {
     useEffect(() => {
         const loadSuppliers = async () => {
             try {
-                const data = await fetchSuppliers();
+                const data = await fetchSuppliers2();
                 setSuppliers(data);
             } catch (error) {
                 console.error('Error fetching suppliers:', error);
@@ -31,7 +31,8 @@ const SupplierManagement = () => {
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Contact</th>
+                    <th>Email</th>
+                    <th>Phone</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -39,11 +40,9 @@ const SupplierManagement = () => {
                 {suppliers.map((supplier) => (
                     <tr key={supplier._id}>
                         <td>{supplier.name}</td>
-                        <td>{supplier.contact}</td>
+                        <td>{supplier.email}</td>
+                        <td>{supplier.phone}</td>
                         <td>
-                            <Button variant="warning" size="sm" className="me-2">
-                                Edit
-                            </Button>
                             <Button
                                 variant="danger"
                                 size="sm"

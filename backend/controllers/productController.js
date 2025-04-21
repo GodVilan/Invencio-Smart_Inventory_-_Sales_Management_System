@@ -84,3 +84,13 @@ exports.getFilteredProducts = async (req, res) => {
         res.status(500).json({ message: 'Failed to fetch filtered products', error: error.message });
     }
 };
+
+exports.syncStockLevels = async (req, res) => {
+    const { id, stock } = req.body;
+    try {
+        const product = await Product.findByIdAndUpdate(id, { stock }, { new: true });
+        res.json(product);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to sync stock levels', error: error.message });
+    }
+};
