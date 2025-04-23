@@ -32,8 +32,8 @@ const SupplierProfile = () => {
 
     const handleSave = async () => {
         try {
-            const updatedProfile = await updateSupplierProfile(formData);
-            setProfile(updatedProfile);
+            const updated = await updateSupplierProfile(formData);
+            setProfile(updated);
             setEditing(false);
         } catch (error) {
             setError('Failed to update supplier profile.');
@@ -42,7 +42,7 @@ const SupplierProfile = () => {
 
     if (loading) {
         return (
-            <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '50vh' }}>
+            <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '40vh' }}>
                 <Spinner animation="border" variant="primary" />
             </div>
         );
@@ -50,16 +50,15 @@ const SupplierProfile = () => {
 
     if (error) {
         return (
-            <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '50vh' }}>
-                <Alert variant="danger">{error}</Alert>
-            </div>
+            <Alert variant="danger" className="text-center my-4">{error}</Alert>
         );
     }
 
     return (
-        <Card className="mb-4 shadow-sm border-info">
+        <Card className="shadow-sm border-0 rounded-4 mb-4">
             <Card.Body>
-                <Card.Title>Supplier Profile</Card.Title>
+                <Card.Title className="text-purple fw-bold mb-4">Supplier Profile</Card.Title>
+
                 {editing ? (
                     <Form>
                         <Form.Group className="mb-3">
@@ -67,52 +66,59 @@ const SupplierProfile = () => {
                             <Form.Control
                                 type="text"
                                 name="name"
-                                value={formData.name}
+                                value={formData.name || ''}
                                 onChange={handleInputChange}
                             />
                         </Form.Group>
+
                         <Form.Group className="mb-3">
                             <Form.Label>Email</Form.Label>
                             <Form.Control
                                 type="email"
                                 name="email"
-                                value={formData.email}
+                                value={formData.email || ''}
                                 onChange={handleInputChange}
                             />
                         </Form.Group>
+
                         <Form.Group className="mb-3">
                             <Form.Label>Phone</Form.Label>
                             <Form.Control
                                 type="text"
                                 name="phone"
-                                value={formData.phone}
+                                value={formData.phone || ''}
                                 onChange={handleInputChange}
                             />
                         </Form.Group>
+
                         <Form.Group className="mb-3">
                             <Form.Label>Address</Form.Label>
                             <Form.Control
                                 type="text"
                                 name="address"
-                                value={formData.address}
+                                value={formData.address || ''}
                                 onChange={handleInputChange}
                             />
                         </Form.Group>
+
                         <Form.Group className="mb-3">
                             <Form.Label>Contact Info</Form.Label>
                             <Form.Control
                                 type="text"
                                 name="contactInfo"
-                                value={formData.contactInfo}
+                                value={formData.contactInfo || ''}
                                 onChange={handleInputChange}
                             />
                         </Form.Group>
-                        <Button variant="primary" onClick={handleSave}>
-                            Save
-                        </Button>
-                        <Button variant="secondary" className="ms-2" onClick={() => setEditing(false)}>
-                            Cancel
-                        </Button>
+
+                        <div className="d-flex justify-content-end">
+                            <Button variant="primary" onClick={handleSave}>
+                                Save
+                            </Button>
+                            <Button variant="secondary" className="ms-2" onClick={() => setEditing(false)}>
+                                Cancel
+                            </Button>
+                        </div>
                     </Form>
                 ) : (
                     <>
@@ -121,12 +127,26 @@ const SupplierProfile = () => {
                         <p><strong>Phone:</strong> {profile.phone || 'N/A'}</p>
                         <p><strong>Address:</strong> {profile.address || 'N/A'}</p>
                         <p><strong>Contact Info:</strong> {profile.contactInfo || 'N/A'}</p>
-                        <Button variant="warning" onClick={() => setEditing(true)}>
-                            Edit Profile
-                        </Button>
+
+                        <div className="d-flex justify-content-end">
+                            <Button variant="warning" onClick={() => setEditing(true)}>
+                                Edit Profile
+                            </Button>
+                        </div>
                     </>
                 )}
             </Card.Body>
+
+            <style>{`
+                .text-purple {
+                    color: #7e5bef;
+                }
+
+                .btn-warning:hover {
+                    background-color: #ff922b;
+                    border-color: #ff922b;
+                }
+            `}</style>
         </Card>
     );
 };

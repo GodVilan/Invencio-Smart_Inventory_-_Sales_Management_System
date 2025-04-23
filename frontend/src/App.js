@@ -5,6 +5,9 @@ import Login from './pages/Login';
 import Dashboard from './components/Dashboard';
 // import AdminPage from './pages/AdminPage';
 import SellerPage from './pages/SellerPage';
+import SellerDashboard from './components/SellerDashboard';
+import ProductList from './components/ProductList';
+import SalesManagement from './components/SalesManagement';
 import SupplierPage from './pages/SupplierPage';
 import ProtectedRoute from './routes/ProtectedRoute';
 import PublicRoute from './routes/PublicRoute';
@@ -60,6 +63,9 @@ const App = () => {
                 <Route path="/dashboard" element={<ProtectedRoute role={role} allowedRoles={['admin', 'seller', 'supplier']}><Dashboard /></ProtectedRoute>} />
                 {/* <Route path="/admin" element={<ProtectedRoute role={role} allowedRoles={['admin']}><AdminPage /></ProtectedRoute>} /> */}
                 <Route path="/seller" element={<ProtectedRoute role={role} allowedRoles={['seller']}><SellerPage /></ProtectedRoute>} />
+                <Route path="/seller/dashboard" element={<ProtectedRoute role={role} allowedRoles={['seller']}><SellerDashboard /></ProtectedRoute>} />
+                <Route path="/seller/products" element={<ProtectedRoute role={role} allowedRoles={['seller']}><ProductList /></ProtectedRoute>} />
+                <Route path="/seller/sales" element={<ProtectedRoute role={role} allowedRoles={['seller']}><SalesManagement /></ProtectedRoute>} />
                 <Route path="/supplier" element={<ProtectedRoute role={role} allowedRoles={['supplier']}><SupplierPage /></ProtectedRoute>} />
                 <Route path = "/supplier-dashborad" element={<ProtectedRoute role={role} allowedRoles={['supplier']}><SupplierDashboard /></ProtectedRoute>} />
                 <Route path="/admin/users" element={<ProtectedRoute role={role} allowedRoles={['admin']}><UserManagement /></ProtectedRoute>} />

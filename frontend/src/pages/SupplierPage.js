@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Button, ButtonGroup } from 'react-bootstrap';
+import { Container, Button, ButtonGroup, Spinner, Alert } from 'react-bootstrap';
 import SupplierDashboard from '../components/SupplierDashboard';
 import SupplierProfile from '../components/SupplierProfile';
 import SupplierProducts from '../components/SupplierProducts';
 import SupplierAnalytics from '../components/SupplierAnalytics';
-
 import { fetchSupplierDashboardData } from '../api';
 
 const SupplierPage = () => {
@@ -19,15 +18,11 @@ const SupplierPage = () => {
                 const data = await fetchSupplierDashboardData();
                 setDashboardData(data.stats);
             } catch (err) {
-                console.warn("⚠ Backend not responding. Using mock dashboard data.");
-
-                // Fallback mock data
+                console.warn('⚠ Backend not responding. Using mock dashboard data.');
                 setDashboardData({
                     totalSupplies: 15,
                     pendingOrders: 3,
                 });
-
-                // Optional: show message in console or UI
                 setError('Backend not available — showing mock data');
             } finally {
                 setLoading(false);
@@ -36,42 +31,40 @@ const SupplierPage = () => {
 
         loadDashboardData();
     }, []);
-    
+
     return (
         <Container className="mt-4">
-            <h1 className="text-center mb-4">Supplier Portal</h1>
+            <h2 className="text-center fw-bold mb-4 text-purple">Supplier Portal</h2>
+
+            {error && (
+                <Alert variant="warning" className="text-center">
+                    {error}
+                </Alert>
+            )}
 
             {/* Navigation buttons */}
             <div className="d-flex justify-content-center mb-4">
                 <ButtonGroup>
-                    <Button
-                        variant={activeTab === 'dashboard' ? 'primary' : 'outline-primary'}
-                        onClick={() => setActiveTab('dashboard')}
-                    >
-                        Dashboard
-                    </Button>
-                    <Button
-                        variant={activeTab === 'management' ? 'primary' : 'outline-primary'}
-                        onClick={() => setActiveTab('management')}
-                    >
-                        Management
-                    </Button>
-                    <Button
-                        variant={activeTab === 'profile' ? 'primary' : 'outline-primary'}
-                        onClick={() => setActiveTab('profile')}
-                    >
-                        Profile
-                    </Button>
-                    <Button
-                        variant={activeTab === 'analytics' ? 'primary' : 'outline-primary'}
-                        onClick={() => setActiveTab('analytics')}
-                    >
-                        Analytics
-                    </Button>
+                    {['dashboard', 'management', 'profile', 'analytics'].map((tab) => (
+                        <Button
+                            key={tab}
+                            variant={activeTab === tab ? 'primary' : 'outline-primary'}
+                            className="text-capitalize"
+                            onClick={() => setActiveTab(tab)}
+                        >
+                            {tab}
+                        </Button>
+                    ))}
                 </ButtonGroup>
             </div>
 
-            {/* Active section */}
+            {/* Section display */}
+            {loading && (
+                <div className="d-flex justify-content-center">
+                    <Spinner animation="border" variant="primary" />
+                </div>
+            )}
+
             {!loading && dashboardData && (
                 <>
                     {activeTab === 'dashboard' && <SupplierDashboard data={dashboardData} />}
@@ -80,6 +73,12 @@ const SupplierPage = () => {
                     {activeTab === 'analytics' && <SupplierAnalytics />}
                 </>
             )}
+
+            <style>{`
+                .text-purple {
+                    color: #7e5bef;
+                }
+            `}</style>
         </Container>
     );
 };

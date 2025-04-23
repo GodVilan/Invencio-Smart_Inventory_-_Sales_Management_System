@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Spinner, Alert, Image } from 'react-bootstrap';
-import { fetchSales2, createSale2, deleteSale2, updateSale2, fetchProducts2, fetchSalesReport2 } from '../api';
-
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import { Table, Button, Modal, Form, Spinner, Alert } from 'react-bootstrap';
+import { fetchSales2, createSale2, updateSale2, deleteSale2, fetchProducts2 } from '../api';
 
 const SalesManagement = () => {
     const [sales, setSales] = useState([]);
@@ -12,8 +9,7 @@ const SalesManagement = () => {
     const [error, setError] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [currentSale, setCurrentSale] = useState(null); // For editing or creating a sale
-    const [filter, setFilter] = useState('all');
-    const [report, setReport] = useState(null); // For storing the sales report
+    const [filter, setFilter] = useState('all'); // Filter for sales (daily, weekly, etc.)
 
     useEffect(() => {
         const loadSalesAndProducts = async () => {
@@ -71,31 +67,6 @@ const SalesManagement = () => {
         setShowModal(true);
     };
 
-    const handleGenerateReport = async () => {
-        try {
-            const reportData = await fetchSalesReport2();
-            setReport(reportData);
-
-            // Generate PDF
-            const doc = new jsPDF();
-            doc.text('Sales Report', 14, 10);
-            doc.autoTable({
-                head: [['Period', 'Total Sales', 'Total Quantity']],
-                body: reportData.map((entry) => [
-                    entry._id,
-                    `$${entry.totalSales.toFixed(2)}`,
-                    entry.totalQuantity,
-                ]),
-            });
-
-            // Save the PDF
-            doc.save('Sales_Report.pdf');
-        } catch (error) {
-            console.error('Error generating sales report:', error);
-            setError('Failed to generate sales report.');
-        }
-    };
-
     const handleQuantityChange = (quantity) => {
         const product = products.find((p) => p._id === currentSale.productId);
         const price = product ? product.price : 0;
@@ -132,19 +103,13 @@ const SalesManagement = () => {
         return <Alert variant="danger">{error}</Alert>;
     }
 
-    // Add a section to display the sales report
     return (
         <div>
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <h3>Sales Management</h3>
-                <div>
-                    <Button variant="primary" className="me-2" onClick={handleAddSale}>
-                        Add Sale
-                    </Button>
-                    <Button variant="success" onClick={handleGenerateReport}>
-                        Generate Report
-                    </Button>
-                </div>
+                <Button variant="primary" onClick={handleAddSale}>
+                    Add Sale
+                </Button>
             </div>
 
             <Form.Select
@@ -172,20 +137,7 @@ const SalesManagement = () => {
                 <tbody>
                     {filteredSales.map((sale) => (
                         <tr key={sale._id}>
-                            <td>
-                                {sale.productId?.image ? (
-                                    <Image
-                                        src={sale.productId.image}
-                                        alt={sale.productId.name}
-                                        thumbnail
-                                        width={50}
-                                        className="mb-2"
-                                    />
-                                ) : (
-                                    'No Image'
-                                )}
-                                <div>{sale.productId?.name || 'N/A'}</div>
-                            </td>
+                            <td>{sale.productId?.name || 'N/A'}</td>
                             <td>{sale.quantity}</td>
                             <td>${sale.totalAmount.toFixed(2)}</td>
                             <td>{new Date(sale.date).toLocaleDateString()}</td>
@@ -210,31 +162,6 @@ const SalesManagement = () => {
                     ))}
                 </tbody>
             </Table>
-
-            {/* Display the sales report */}
-            {report && (
-                <div className="mt-4">
-                    <h4>Sales Report</h4>
-                    <Table striped bordered hover>
-                        <thead>
-                            <tr>
-                                <th>Period</th>
-                                <th>Total Sales</th>
-                                <th>Total Quantity</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {report.map((entry, index) => (
-                                <tr key={index}>
-                                    <td>{entry._id}</td>
-                                    <td>${entry.totalSales.toFixed(2)}</td>
-                                    <td>{entry.totalQuantity}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </Table>
-                </div>
-            )}
 
             {/* Add/Edit Sale Modal */}
             <Modal show={showModal} onHide={() => setShowModal(false)} centered>

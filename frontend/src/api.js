@@ -48,7 +48,8 @@ export const fetchAdminDashboardData = async () => {
 
 export const fetchSellerDashboardData = async () => {
     try {
-        const response = await api.get('/seller/dashboard'); // Seller-specific endpoint
+        const response = await api.get('/seller/dashboard'); // Correct endpoint
+        console.log('Fetched Seller Dashboard Data:', response.data); // Log the response
         return response.data;
     } catch (error) {
         console.error('Error fetching seller dashboard data:', error);
