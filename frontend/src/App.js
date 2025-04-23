@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import Dashboard from './components/Dashboard';
 // import AdminPage from './pages/AdminPage';
 import SellerPage from './pages/SellerPage';
@@ -58,6 +59,7 @@ const App = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
                 <Route path="/login" element={<PublicRoute><Login setRole={setRole} /></PublicRoute>} />
+                <Route path="/forgot-password" element={<PublicRoute><ForgotPasswordPage /></PublicRoute>} />
                 <Route path="/profile" element={<ProtectedRoute role={role} allowedRoles={['admin', 'seller', 'supplier']}><Profile /></ProtectedRoute>} />
                 <Route path="/change-password" element={<ProtectedRoute role={role} allowedRoles={['admin', 'seller', 'supplier']}><ChangePasswordPage /></ProtectedRoute>} />
                 <Route path="/dashboard" element={<ProtectedRoute role={role} allowedRoles={['admin', 'seller', 'supplier']}><Dashboard /></ProtectedRoute>} />

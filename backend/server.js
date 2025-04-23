@@ -10,6 +10,7 @@ const userRoutes = require('./routes/userRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const brandRoutes = require('./routes/brandRoutes');
 const adminRoutes = require('./routes/adminRoutes'); // Import admin routes
+const forgotPasswordRoutes = require('./routes/forgotPasswordRoutes');
 
 dotenv.config();
 connectDB();
@@ -23,6 +24,7 @@ app.use(express.json());
 
 // API routes
 app.use('/api/auth', authRoutes);
+app.use('/api/forgot-password', forgotPasswordRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/admin/products', productRoutes); // RBAC applied in productRoutes
 app.use('/api/admin/sales', salesRoutes); // RBAC applied in salesRoutes
