@@ -1,120 +1,133 @@
-Absolutely! Here's your **updated and complete project description** for **Invencio – Smart Inventory & Sales Management System**, now including the detailed user features and functionalities:
-
----
-
 # 🚀 Invencio – Smart Inventory & Sales Management System
 
-**Invencio** is a modern, full-featured inventory control and sales management system designed to streamline product tracking, order processing, and inventory analysis for small to medium-sized businesses.
+**Invencio** is a modern, full-featured inventory and sales management system designed to streamline product tracking, order processing, and inventory analytics for small to medium-sized businesses.
 
-It offers seamless management of products, suppliers, sales, and purchases, along with powerful reporting tools, dashboard insights, and user-friendly interfaces.
-
-Built to help businesses stay ahead of stock issues, optimize supply chains, and make data-driven decisions with confidence.
+This system helps businesses stay ahead of stock issues, optimize supply chains, and make confident, data-driven decisions.
 
 ---
 
 ## 🔧 Core Features
 
 ### 🛡️ Authentication & User Management
-- Secure user registration and login using JWT-based authentication
-- Profile management and password update functionality
-- Role-based access control for Admin, Seller, and Supplier users
+- Secure registration and login with JWT-based authentication
+- Profile and password management
+- Role-based access control (Admin, Seller, Supplier)
 
 ---
 
 ## 👥 User Roles & Functionalities
 
-### 👑 **Admin – Full Access**
-- Manage all users: create, update, or delete Sellers and Suppliers
-- Full control over products: add, edit, delete, and categorize
-- Create, view, edit, and delete all sales records
-- Manage purchases and update inventory
-- View detailed sales history and generate reports (daily, weekly, monthly, yearly)
-- Access interactive dashboard analytics and visualizations
-- Receive alerts for low inventory and reorder suggestions
-- (Future) Export reports to PDF/Excel
-- (Future) Receive email notifications for stock and sales events
+### 👑 Admin – Full Access
+- Manage users: Add, update, delete Sellers and Suppliers
+- Manage products: Create, edit, delete, categorize
+- Manage purchases and inventory updates
+- Full control over all sales records
+- View sales history and generate time-based reports
+- Access full dashboard with analytics
+- Receive low-stock alerts and reorder suggestions
+- *(Future)* Export reports (PDF/Excel)
+- *(Future)* Email notifications for stock/sales events
 
-### 🧑‍💼 **Seller – Sales-Focused Access**
-- View all available products with filtering and search
-- Sell products and automatically update stock levels
-- Create, edit, and delete their own sales records
-- View personal sales history with time-based breakdowns
-- Access a personalized dashboard with sales analytics
-- Manage their profile and update password
-- Cannot manage users, suppliers, or inventory purchases
+### 🧑‍💼 Seller – Sales-Focused Access
+- View available products
+- Create, edit, and delete own sales records
+- Auto-update inventory after sales
+- View personal sales history (daily/weekly/monthly/yearly)
+- Access personalized dashboard insights
+- Manage own profile
+- ❌ Cannot manage users, suppliers, or purchases
 
-### 🚚 **Supplier – Supplier-Specific Access**
-- View supplier-related information and purchase records involving them
-- Manage their own profile and contact details
-- (Optional) View analytics related to their supplied products
-- Cannot access products, sales, purchases, or user management
+### 🚚 Supplier – Read-Only Access
+- View supplier-related purchase data
+- Manage own profile and contact details
+- *(Optional)* View analytics for supplied products
+- ❌ Cannot manage products, sales, or users
 
 ---
 
 ## 📦 Product Management
-- Add products with complete details: name, description, price, stock level
-- Manage product categories, brands, and variants
-- Edit, delete, filter, search, and paginate through product listings
-- View products specific to logged-in users when applicable
+- Add, edit, and delete product details (name, description, price, stock)
+- Manage categories, brands, and variants
+- Filter, search, and paginate through product lists
 
 ---
 
 ## 💰 Sales Management
-- Sell products with auto stock adjustment
-- View, edit, and delete sales records with filtering and pagination
-- Generate real-time reports and trends from sales data
+- Sell products with automatic stock adjustment
+- Edit and delete sales records
+- View sales trends and generate reports
+
+---
+
+## 🛒 Purchase & Inventory Control
+- Record and update purchase data
+- Sync inventory in real-time
+- Auto-flag low stock for reorder
+
+---
 
 ## 👤 Seller & Supplier Management
-- Create and manage seller and supplier profiles
-- Add, update, and delete supplier contact details
-- Organize supplier relationships for smooth procurement processes
+- Add, update, and delete seller and supplier profiles
+- Organize supplier data for efficient procurement
 
 ---
 
 ## 📊 Sales History & Reports
-- View and analyze sales history:
+- View and analyze sales by:
   - Daily
   - Weekly
   - Monthly
   - Yearly
-- Analyze product performance over time and across categories
+- Analyze product performance by time or category
 
 ---
 
 ## 📈 Dashboard & Visualization
-- Interactive visual dashboards show:
-  - Stock levels by brand and category
+- Interactive visual dashboard to monitor:
+  - Stock by brand/category
   - Top-selling products
-  - Sales trends over time
-  - Low-inventory alerts and reorder prompts
-- Built with responsive and modern charting libraries (Chart.js / Recharts)
+  - Sales trends
+  - Low-stock alerts
+- Built using Chart.js or Recharts for clean and responsive charts
 
 ---
 
 ## 🧩 Tech Stack
+
 - **Frontend:** React.js  
 - **Backend:** Node.js + Express.js  
 - **Database:** MongoDB (NoSQL)  
-- **Authentication:** JWT (JSON Web Tokens)  
-- **UI/Styling:** Bootstrap (Responsive Design)  
-- **Visualization:** Recharts  
-- **Libraries & Tools:** Mongoose, Axios, React Router, dotenv, bcrypt, etc.
+- **Authentication:** JSON Web Tokens (JWT)  
+- **Styling:** Bootstrap (Responsive Design)  
+- **Visualization:** Chart.js or Recharts  
+- **Tools & Libraries:** Mongoose, Axios, React Router, dotenv, bcrypt, etc.
 
 ---
 
 ## ✅ Key Highlights
-- 🔍 Advanced filtering, search, and pagination across modules  
-- 🔄 Real-time inventory updates on sales and purchases  
-- 📊 Visual dashboards for data-driven decision-making  
-- 🔐 Secure, role-based access with JWT authentication  
-- 📱 Fully responsive layout using Bootstrap  
+- Advanced search, filtering, and pagination
+- Real-time inventory updates
+- Role-based user access and permissions
+- Responsive UI with Bootstrap
+- Insightful sales and stock visualizations
 
 ---
 
 ## 🚧 Future Enhancements
-- More granular role-based permissions (Admin, Seller, Viewer)
-- Exportable reports in PDF/Excel format
-- Email alerts for stock thresholds and completed transactions
-- Enhanced BI tools with filters, interactive charts, and drill-down analytics
+- Enhanced role-based access (Admin, Seller, Viewer)
+- Export reports as PDF/Excel
+- Email alerts for stock thresholds and completed orders
+- Advanced BI dashboard with dynamic filters and drill-down charts
 
 ---
+
+## 📌 License
+
+This project is open-source and available under the [MIT License](LICENSE).
+
+---
+
+## 🙌 Contributions
+
+Contributions are welcome! Please feel free to fork the repo and submit a pull request. For major changes, open an issue first to discuss what you'd like to change.
+
