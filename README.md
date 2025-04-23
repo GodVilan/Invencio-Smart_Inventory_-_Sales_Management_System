@@ -64,8 +64,6 @@ Built to help businesses stay ahead of stock issues, optimize supply chains, and
 - View, edit, and delete sales records with filtering and pagination
 - Generate real-time reports and trends from sales data
 
-
-
 ## 👤 Seller & Supplier Management
 - Create and manage seller and supplier profiles
 - Add, update, and delete supplier contact details
@@ -120,5 +118,3 @@ Built to help businesses stay ahead of stock issues, optimize supply chains, and
 - Enhanced BI tools with filters, interactive charts, and drill-down analytics
 
 ---
-
-Let me know if you'd like a summarized version for your resume or a more technical one for GitHub/README!
