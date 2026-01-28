@@ -123,7 +123,7 @@ This system helps businesses stay ahead of stock issues, optimize supply chains,
 
 ## 📌 License
 
-This project is open-source and available under the [MIT License](LICENSE).
+This project is open-source.
 
 ---
 
